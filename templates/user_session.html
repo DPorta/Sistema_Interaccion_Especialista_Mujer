@@ -1,0 +1,8 @@
+{% extends "layout.html" %} {% block title %} Sesión Usuario {% endblock title %} 
+{% block body %} 
+    <h1 class="mb-4">{{session['nombre']}} ha iniciado sesion correctamente</h1>
+    
+    <a class="w-full px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900" href="{{url_for('logout')}}">
+        Cerrar Sesión
+    </a>
+{% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %} Inicio {% endblock %}</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href=" {{url_for('static', filename='css/dist/output.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href=" {{url_for('static', filename='css/estilos.css') }}"
+    />
+    
+  </head>
+  <body>
+    <!-- NAVIGATION  -->
+    
+      {% block body %} {% endblock %}
+
+    <!-- footer -->
+   
+  </body>
+</html>

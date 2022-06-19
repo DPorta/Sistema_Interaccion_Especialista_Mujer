@@ -1,0 +1,139 @@
+{% extends "layout_alumno.html" %} {% block title %} Editar Perfil Alumno {%
+endblock title %} {% block content %} {% with messages = get_flashed_messages()
+%} {% if messages %} {% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+<div class="info_alumno">
+  <table>
+    <tr>
+      <td>Nombre(s): <b>{{alumno["nombres"]}}</b></td>
+      <td>Apellido(s): <b>{{alumno["apellidos"]}}</b></td>
+      <td>Email: <b>{{alumno["email"]}}</b></td>
+      <td>Sede: <b>{{alumno["sede"]}}</b></td>
+    </tr>
+    <tr>
+      <td>Carrera: <b>{{alumno["carrera"]}}</b></td>
+      <td>Edad: <b>{{alumno["edad"]}}</b></td>
+      <td>Ciclo: <b>{{alumno["ciclo"]}}</b></td>
+      <td>Sexo: <b>{{alumno["sexo"]}}</b></td>
+    </tr>
+  </table>
+</div>
+
+<div class="container login-card row col-3 p-0">
+  {% if error %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% endif %}
+  <div class="justify-content-center">
+    <form class="form" action="/editar_perfil_a" method="POST">
+      <div class="col-auto text-center">
+        <h1 class="mt-0">Ingrese todos los datos a actualizar:</h1>
+      </div>
+
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" name="nombres" />
+        <label>Nombres</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" name="apellidos" />
+        <label>Apellidos</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <select class="form-select" name="sede">
+          <option value="" selected></option>
+          <option value="San Miguel">San Miguel</option>
+          <option value="San Isidro">San Isidro</option>
+          <option value="Monterrico">Monterrico</option>
+          <option value="Villa">Villa</option>
+        </select>
+        <label>Sede</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <select class="form-select" name="sexo">
+          <option value="" selected></option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
+        <label>Género</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <select class="form-select" name="carrera">
+          <option value="" selected></option>
+          <option value="Ingenieria de sistemas de información">
+            Ingenieria de sistemas de información
+          </option>
+          <option value="Ingenieria de sistemas de software">
+            Ingenieria de sistemas de software
+          </option>
+          <option value="Ciencias de la Computación">
+            Ciencias de la Computación
+          </option>
+        </select>
+        <label>Carrera</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" name="email" />
+        <label>Email</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <select class="form-select" name="ciclo">
+          <option value="" selected></option>
+          <option value="1ro">1ro</option>
+          <option value="2do">2do</option>
+          <option value="3ro">3ro</option>
+          <option value="4to">4to</option>
+          <option value="5to">5to</option>
+          <option value="6to">6to</option>
+          <option value="7mo">7mo</option>
+          <option value="8vo">8vo</option>
+          <option value="9no">9no</option>
+          <option value="10mo">10mo</option>
+        </select>
+        <label>Ciclo</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" name="edad" />
+        <label>Edad</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <input
+          type="password"
+          class="form-control"
+          name="contrasena"
+          disabled
+        />
+        <label>Contraseña</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <button class="btn btn-primary d-block mx-auto">Actualizar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
