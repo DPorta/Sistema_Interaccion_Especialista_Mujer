@@ -1,17 +1,23 @@
-{% extends "layout.html" %} {% block title %} Sesión Usuario {% endblock title %} 
+{% extends "layout.html" %} {% block title %} Pacientes {% endblock title %} 
 {% block body %} 
  
 
 <nav x-data="accordion(6)" class="fixed top-0 z-40 flex flex-wrap items-center justify-between w-full px-4 py-2 tracking-wide shadow-md  bg-opacity-90 bg-sky-900 md:px-8 lg:px-14">
         <!-- Left nav -->
         <div class="flex items-center">
-          <a href="{{url_for('user_session')}}" class="text-3xl tracking-wide">
-            <img class="mx-auto h-12 w-auto" src="{{url_for('static', filename='imagenes/test.png')}}" alt="Logo" >
-          </a>
-          <a href="{{url_for('user_session')}}" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
-            Usuarios
-          </a>
-        </div>
+            <a href="{{url_for('esp_session')}}" class="text-3xl tracking-wide">
+              <img class="mx-auto h-12 w-auto" src="{{url_for('static', filename='imagenes/test.png')}}" alt="Logo" >
+            </a>
+            <a href="{{url_for('esp_session')}}" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
+              Consultas
+            </a>
+            <a href="#" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
+              Historial
+            </a>
+            <a href="{{url_for('pacientes_tab')}}" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
+              Pacientes
+            </a>
+          </div>
         <!-- End left nav -->
     
         <!-- Right nav -->
@@ -100,16 +106,16 @@
         <!-- End right nav -->
 </nav>
 
-{% if len_users_list == 0 %}
+{% if len_paciente_list == 0 %}
 <!-- CODIGO PARA 0 USUARIOS -->
 {% else %}    
     <div class="flex justify-between px-8">
         <div>
-            <p class="mt-20"> <b>Usuarios en la app ( </b>{{len_users_list}} <b>)</b></p>
+            <p class="mt-20"> <b>Pacientes en la app ( </b>{{len_paciente_list}} <b>)</b></p>
         </div>
         <div class="flex px-20 content-between">
             <p class="px-4 py-2 mt-20 ">Buscar BUTTON</p>
-            <a class="px-4 py-2 mt-20 text-white bg-blue-600 rounded-lg hover:bg-blue-900 text-center" href="{{url_for('registro_usuario')}}">Crear usuario</a>
+            <a class="px-4 py-2 mt-20 text-white bg-blue-600 rounded-lg hover:bg-blue-900 text-center" href="{{url_for('registro_paciente')}}">Crear Paciente</a>
         </div>
     </div>
 
@@ -130,10 +136,7 @@
                         DNI
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Tipo
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Estado
+                        Teléfono
                     </th>
                     <th scope="col" class="px-6 py-3">
                         <span class="sr-only">Edit</span>
@@ -141,38 +144,25 @@
                 </tr>
             </thead>
             <tbody>
-                {% for user in users_list%}
+                {% for paciente in paciente_list%}
                 <tr class="bg-white border-b dark:bg-white dark:border-gray-300">
                     <th scope="row" class="px-6 py-4 font-medium text-black dark:text-black whitespace-nowrap">
-                        {{user['nombre']}}
+                        {{paciente['nombre']}}
                     </th>
                     <td class="px-6 py-4">
-                        {{user['apellido']}}
+                        {{paciente['apellido']}}
                     </td>
                     <td class="px-6 py-4">
-                        {{user['correo']}}
+                        {{paciente['correo']}}
                     </td>
                     <td class="px-6 py-4">
-                        {{user['dni']}}
+                        {{paciente['dni']}}
                     </td>
                     <td class="px-6 py-4">
-                        {% if user['idTipo'] == 1 %}
-                        Administrador
-                        {% else %}
-                        Especialista
-                        {% endif %}
+                        {{paciente['numero']}}
                     </td>
-                    {% if user['idEstadoUsuario'] == 1 %}
-                        <td class="px-6 py-4 text-green-400">
-                            Activo
-                        </td>
-                        {% else %}
-                        <td class="px-6 py-4 text-red-500">
-                            Inactivo
-                        </td>
-                    {% endif %}
                     <td class="flex px-2 py-4 text-right justify-between">
-                        <a type="button" href="{{url_for('edit_user', user_id=user['id'])}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <a type="button" href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                         <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false">
                             <!-- Trigger for Modal -->
                             <button type="button" @click="showModal = true"
@@ -219,12 +209,12 @@
                                             <div class="mt-3 text-left sm:mt-0 sm:ml-4 whitespace-normal">
                                                 <h3 class="text-lg leading-6 font-medium text-gray-900"
                                                     id="modal-title">
-                                                    Eliminar Usuario
+                                                    Eliminar paciente
                                                 </h3>
                                                 <p class="text-sm text-gray-500 mt-2">
-                                                    ¿Está seguro de eliminar al usuario"{{ user['nombre'] }}"?
+                                                    ¿Está seguro de eliminar al paciente"{{ paciente['nombre'] }}"?
                                                     <br>
-                                                    El usuario "{{ user['nombre'] }}" con el id "{{user['id']}}" se eliminará de la lista de usuarios y no podrá realizar ninguna actividad.
+                                                    El paciente "{{ paciente['nombre'] }}" con el id "{{paciente['id']}}" se eliminará de la lista de pacientes y no podrá realizar ninguna actividad.
                                                 </p>
                                             </div>
                                         </div>
@@ -232,7 +222,7 @@
                                     <div
                                         class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col md:flex-row-reverse">
                                         <a type="button"
-                                            href="{{url_for('delete_user', user_id=user['id'])}}"
+                                            href="{{url_for('delete_paciente', paciente_id=paciente['id'])}}"
                                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                                             Eliminar
                                         </a>

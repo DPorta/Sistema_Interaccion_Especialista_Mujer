@@ -5,11 +5,17 @@
 <nav x-data="accordion(6)" class="fixed top-0 z-40 flex flex-wrap items-center justify-between w-full px-4 py-2 tracking-wide shadow-md  bg-opacity-90 bg-sky-900 md:px-8 lg:px-14">
         <!-- Left nav -->
         <div class="flex items-center">
-          <a href="{{url_for('user_session')}}" class="text-3xl tracking-wide">
+          <a href="{{url_for('esp_session')}}" class="text-3xl tracking-wide">
             <img class="mx-auto h-12 w-auto" src="{{url_for('static', filename='imagenes/test.png')}}" alt="Logo" >
           </a>
-          <a href="{{url_for('user_session')}}" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
-            Usuarios
+          <a href="{{url_for('esp_session')}}" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
+            Consultas
+          </a>
+          <a href="#" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
+            Historial
+          </a>
+          <a href="{{url_for('pacientes_tab')}}" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
+            Pacientes
           </a>
         </div>
         <!-- End left nav -->
@@ -108,6 +114,10 @@
         <div>
             <p class="mt-20"> <b>Consultas en la app ( </b>{{len_consulta_list}} <b>)</b></p>
         </div>
+        <div class="flex px-20 content-between">
+          <p class="px-4 py-2 mt-20 ">Buscar BUTTON</p>
+          <a class="px-4 py-2 mt-20 text-white bg-blue-600 rounded-lg hover:bg-blue-900 text-center" href="{{url_for('registro_consulta')}}">Crear consulta</a>
+      </div>
     </div>
 {% endif %}
 
