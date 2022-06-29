@@ -1,8 +1,279 @@
 {% extends "layout.html" %} {% block title %} Sesión Usuario {% endblock title %} 
 {% block body %} 
-    <h1 class="mb-4">{{session['nombre']}} ha iniciado sesion correctamente</h1>
+ 
+
+<nav x-data="accordion(6)" class="fixed top-0 z-40 flex flex-wrap items-center justify-between w-full px-4 py-2 tracking-wide shadow-md  bg-opacity-90 bg-sky-900 md:px-8 lg:px-14">
+        <!-- Left nav -->
+        <div class="flex items-center">
+          <a href="{{url_for('user_session')}}" class="text-3xl tracking-wide">
+            <img class="mx-auto h-12 w-auto" src="{{url_for('static', filename='imagenes/test.png')}}" alt="Logo" >
+          </a>
+          <a href="{{url_for('user_session')}}" class="inline-block px-4 py-2 no-underline hover:text-gray-300 text-white">
+            Usuarios
+          </a>
+        </div>
+        <!-- End left nav -->
     
-    <a class="w-full px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900" href="{{url_for('logout')}}">
-        Cerrar Sesión
-    </a>
+        <!-- Right nav -->
+        <!-- Show menu sm,md -->
+        <!-- Toggle button -->
+        <div @click="handleClick()" x-data="{open : false}" class="block text-white cursor-pointer lg:hidden">
+          <button @click="open = ! open" class="w-6 h-6 text-lg">
+            <svg x-show="! open" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" :clas="{'transition-full each-in-out transform duration-500':! open}">
+              <rect width="48" height="48" fill="white" fill-opacity="0.01"></rect>
+              <path d="M7.94977 11.9498H39.9498" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M7.94977 23.9498H39.9498" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M7.94977 35.9498H39.9498" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+    
+            <svg x-show="open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <!-- End toggle button -->
+    
+        <!-- Toggle menu -->
+        <div x-ref="tab" :style="handleToggle()" class="relative w-full overflow-hidden transition-all duration-700 lg:hidden max-h-0">
+          <div class="flex flex-col my-3 space-y-2 text-lg hover:font-b text-white">
+            <a href="#" class="hover:text-gray-900"><span>Link</span></a>
+            <hr>
+            <a href="#" class="hover:text-gray-900"><span>Link</span></a>
+            <hr>
+            <a href="#" class="hover:text-gray-900"><span>Link</span></a>
+          </div>
+          <div class="py-6 px-5 space-y-6">
+            <div class="grid grid-cols-2 gap-y-4 gap-x-8">
+              <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700">
+                About
+              </a>
+    
+              <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700">
+                Contact
+              </a>
+            </div>
+          </div>
+          <div>
+            <a href="#" class="w-full flex items-center justify-center text-white px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gray-600 hover:bg-gray-700">
+              Sign up
+            </a>
+            <p class="mt-6 text-center text-base font-medium text-gray-500">
+              Existing customer?
+              <a href="#" class="text-gray-600 hover:text-gray-900">
+                Sign in
+              </a>
+            </p>
+          </div>
+        </div>
+        <!-- End toggle menu -->
+        <!-- End show menu sm,md -->
+    
+        <!-- Show Menu lg -->
+        <div class="hidden w-full lg:flex lg:items-center lg:w-auto">
+          <div class="items-center flex-1 pt-6 justify-center  text-gray-500 lg:pt-0 list-reset lg:flex">
+    
+            <!-- Dropdown 1 -->
+            <div x-data="{ open: false }" @mouseleave="open = false" class="relative inline-block" :class="{'text-gray-900': open, 'text-gray-600': !open }">
+              <!-- Dropdown Toggle Button -->
+              <button @mouseover="open = true" class="flex items-center p-2 rounded-md">
+                <span class="mr-4 text-white hover:text-gray-300">{{session['nombre']}} {{session['apellido']}}</span>
+                <span :class="open = ! open ? '': '-rotate-180'" class="transition-transform duration-500 transform">
+                  <svg class="w-4 h-4 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
+                </span>
+              </button>
+              <!-- End Dropdown Toggle Button -->
+    
+              <!-- Dropdown Menu -->
+              <div x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="absolute right-0 py-1 text-gray-500 bg-white rounded-lg shadow-xl min-w-max">
+                <a href="#" class="block px-4 py-1 hover:text-gray-900 hover:bg-gray-100">Mi cuenta</a>
+                <a href="{{url_for('logout')}}" class="block px-4 py-1 hover:text-gray-900 hover:bg-gray-100">Cerrar sesión</a>
+              </div>
+              <!-- End Dropdown Menu -->
+            </div>
+            <!-- End Dropdown 1 -->
+          </div>
+        </div>
+        <!-- End show Menu lg -->
+        <!-- End right nav -->
+</nav>
+
+{% if len_users_list == 0 %}
+<!-- CODIGO PARA 0 USUARIOS -->
+{% else %}    
+    <div class="flex justify-between px-8">
+        <div>
+            <p class="mt-20"> <b>Usuarios en la app ( </b>{{len_users_list}} <b>)</b></p>
+        </div>
+        <div class="flex px-20 content-between">
+            <p class="px-4 py-2 mt-20 ">Buscar BUTTON</p>
+            <a class="px-4 py-2 mt-20 text-white bg-blue-600 rounded-lg hover:bg-blue-900 text-center" href="{{url_for('registro_usuario')}}">Crear usuario</a>
+        </div>
+    </div>
+
+    <div class="relative overflow-x-auto w-3/4 shadow-md sm:rounded-lg mx-auto mt-6">
+        <table class="w-full text-sm text-left text-white dark:text-white">
+            <thead class="text-xs text-white uppercase bg-sky-900 dark:bg-sky-900 dark:text-white">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Nombre
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Apellido
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Correo electrónico
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        DNI
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tipo
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Estado
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Edit</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users_list%}
+                <tr class="bg-white border-b dark:bg-sky-700 dark:border-sky-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-white dark:text-white whitespace-nowrap">
+                        {{user['nombre']}}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{user['apellido']}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{user['correo']}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{user['dni']}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if user['idTipo'] == 1 %}
+                        Administrador
+                        {% else %}
+                        Especialista
+                        {% endif %}
+                    </td>
+                    {% if user['idEstadoUsuario'] == 1 %}
+                        <td class="px-6 py-4 text-green-400">
+                            Activo
+                        </td>
+                        {% else %}
+                        <td class="px-6 py-4 text-red-500">
+                            Inactivo
+                        </td>
+                    {% endif %}
+                    <td class="flex px-2 py-4 text-right justify-between">
+                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false">
+                            <!-- Trigger for Modal -->
+                            <button type="button" @click="showModal = true"
+                                class="text-red-500 hover:text-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                  width="24" height="24"
+                                  viewBox="0 0 172 172"
+                                  style=" fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path>
+                                    <g fill="#e74c3c"><path d="M71.66667,14.33333l-7.16667,7.16667h-43v14.33333h7.95052l12.77962,109.33366v0.05599c0.939,7.07108 7.07882,12.44368 14.20736,12.44368h59.111c7.12853,0 13.26835,-5.37269 14.20736,-12.44368l0.014,-0.05599l12.77962,-109.33366h7.95052v-14.33333h-43l-7.16667,-7.16667zM43.89583,35.83333h84.20833l-12.55566,107.5h-59.111z"></path></g></g></svg>
+                                  </button>
+                        
+                            <!-- Modal -->
+                            <div class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-75 transition-opacity"
+                                x-show="showModal" x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="transform opacity-0"
+                                x-transition:enter-end="transform opacity-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="transform opacity-100"
+                                x-transition:leave-end="transform opacity-0" style="display: none;">
+                                <!-- Modal inner -->
+                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                                    aria-hidden="true">&#8203;</span>
+                                <div class="inline-block align-bottom bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                                    @click.away="showModal = false"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="transform opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="transform opacity-100 translate-y-0 sm:scale-100"
+                                    x-transition:leave-end="transform opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                        <div class="sm:flex sm:items-start">
+                                            <div
+                                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                <svg class="h-6 w-6 text-red-600"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                    aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                </svg>
+                                            </div>
+                                            <div class="mt-3 text-left sm:mt-0 sm:ml-4 whitespace-normal">
+                                                <h3 class="text-lg leading-6 font-medium text-gray-900"
+                                                    id="modal-title">
+                                                    Eliminar Usuario
+                                                </h3>
+                                                <p class="text-sm text-gray-500 mt-2">
+                                                    ¿Está seguro de eliminar al usuario"{{ user['nombre'] }}"?
+                                                    <br>
+                                                    El usuario "{{ user['nombre'] }}" con el id "{{user['id']}}" se eliminará de la lista de usuarios y no podrá realizar ninguna actividad.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col md:flex-row-reverse">
+                                        <a type="button"
+                                            href="{{url_for('delete_user', user_id=user['id'])}}"
+                                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                            Eliminar
+                                        </a>
+                                        <button type="button" @click="showModal = false"
+                                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+<script>
+    // Faq
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('accordion', {
+        tab: 0
+        });
+        Alpine.data('accordion', (idx) => ({
+        init() {
+            this.idx = idx;
+        },
+        idx: -1,
+        handleClick() {
+            this.$store.accordion.tab = this.$store.accordion.tab === this.idx ? 0 : this.idx;
+        },
+        handleRotate() {
+            return this.$store.accordion.tab === this.idx ? '-rotate-180' : '';
+        },
+        handleToggle() {
+            return this.$store.accordion.tab === this.idx ? `max-height: ${this.$refs.tab.scrollHeight}px` : '';
+        }
+        }));
+    })
+    //  end faq
+</script>
 {% endblock %}

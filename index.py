@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'tdp_5_v1'
+app.config['MYSQL_DB'] = 'tdp_5_v2'
 
 #Cursos extraer cosas de la BD
 # CURSOR
@@ -52,11 +52,16 @@ def login():
             cur = mysql.connection.cursor()
 
             # Usuario
-            cur.execute("SELECT * FROM usuario WHERE correo = %s", (email,))
+            cur.execute("SELECT * FROM usuario WHERE correo = %s AND idTipo = 1", (email,))
             user = cur.fetchone()
-            cur.close()
+            
 
-            #Datos de Saludo
+            # Psicologo
+            cur.execute("SELECT * FROM usuario WHERE correo= %s AND idTipo = 2", (email,))
+            escpecialista = cur.fetchone()
+
+            
+            cur.close()
 
             if user is not None and contrasena == user["contrasena"]:
                 session["usuario"] = user
@@ -65,8 +70,17 @@ def login():
                 session["email"] = user['correo']
                 session["contrasena"] = user['contrasena']
                 session["dni"] = user['dni']
-
                 return redirect(url_for('user_session'))
+
+            elif escpecialista is not None and contrasena == escpecialista["contrasena"]:
+                session["usuario"] = escpecialista
+                session["nombre"] = escpecialista['nombre']
+                session["apellido"] = escpecialista['apellido']
+                session["email"] = escpecialista['correo']
+                session["contrasena"] = escpecialista['contrasena']
+                session["dni"] = escpecialista['dni']
+
+                return redirect(url_for('esp_session'))
             else:
                 error="usuario o contraseña incorrectos. Intentelo de nuevo."
 
@@ -85,25 +99,27 @@ def registro_usuario():
         apellidos = request.form['apellidos']
         dni = request.form['dni']
         email = request.form['email']
-        contrasena = request.form['contrasena']
+        contrasena = request.form['dni']
+        estado = request.form['estado']
+        tipo = request.form['tipo']
 
 
         #Para BD sin herencia
         cur = mysql.connection.cursor()
         cur.execute(
             "INSERT INTO usuario (nombre, apellido, dni, correo, contrasena, idEstadoUsuario, idTipo) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-            (nombres, apellidos, dni, email, contrasena,'1','1'))
+            (nombres, apellidos, dni, email, contrasena,estado,tipo))
         mysql.connection.commit()
         cur.close()
 
         flash('Usuario creado correctamente. Ingrese con su email y contraseña.')
-        return redirect(url_for('login'))
+        return redirect(url_for('user_session'))
     
     return render_template('registro_usuario.html')
 
 # Editar Perfil Alumno
-@app.route('/editar_perfil_a', methods=['GET','POST'])
-def editar_perfil_a():
+@app.route('/editar_perfil_user', methods=['GET','POST'])
+def editar_perfil_user():
     if is_logged():
 
         # ID del alumno
@@ -155,11 +171,52 @@ def editar_perfil_a():
         print("No usuario")
         return redirect(url_for('login'))
 
+#Delete user
+@app.route('/delete_user/<user_id>', methods=['GET','POST'])
+def delete_user(user_id):
+    print(user_id)
+
+    cur = mysql.connection.cursor()
+    cur.execute(
+        "DELETE FROM usuario WHERE id = %s" % (user_id))
+    mysql.connection.commit()
+    cur.close()
+
+    return redirect(url_for('user_session'))
+
 # Sesión usuario
 @app.route('/user_session')
 def user_session():
     if is_logged():
-        return render_template('user_session.html')
+        #Obtener total de usuarios
+        cur = mysql.connection.cursor()
+        # Usuario
+        cur.execute("SELECT * FROM usuario")
+        users_list = cur.fetchall()
+        cur.close()
+
+
+        len_users_list=len(users_list)
+
+        return render_template('user_session.html', users_list= users_list, len_users_list=len_users_list)
+    else:
+        return redirect(url_for('login'))
+
+# Sesión especialista
+@app.route('/esp_session')
+def esp_session():
+    if is_logged():
+        #Obtener total de usuarios
+        cur = mysql.connection.cursor()
+        # Usuario
+        cur.execute("SELECT * FROM consulta")
+        consulta_list = cur.fetchall()
+        cur.close()
+
+
+        len_consulta_list=len(consulta_list)
+
+        return render_template('esp_session.html', consulta_list= consulta_list, len_consulta_list=len_consulta_list)
     else:
         return redirect(url_for('login'))
 

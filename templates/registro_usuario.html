@@ -16,7 +16,8 @@
   <div class="justify-content-center">
     <div class="flex items-center justify-center min-h-screen bg-sky-900 w-full">
       <div class="px-8 py-6 mx-4 mt-4 text-left w-4/5 sm:w-1/3">
-          <h3 class="text-2xl font-bold text-center">Registrate con nosotros</h3>
+          <h3 class="text-2xl font-bold text-center text-white">Añade a un nuevo usuario</h3>
+          <h3 class="text-xl mt-4 font-bold text-center text-white">Información Personal</h3>
           <form action="/registro_usuario" method="POST">
               <div class="mt-4">
                   <div>
@@ -42,16 +43,29 @@
                   <div class="mt-4">
                       <label class="block text-white">Password<label>
                               <input type="password" placeholder="Password" name="contrasena"
-                                  class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 text-sky-900">
+                                  class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 text-sky-900" disabled>
+                  </div>
+                  <h3 class="text-xl mt-4 font-bold text-center text-white">Información Laboral</h3>
+                  <div class="mt-4">
+                    <label class="block text-white">Estado<label>
+                    <select name="estado" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 text-sky-900">
+                      <option value="1" selected>Activo</option>
+                      <option value="2">Inactivo</option>
+                    </select>
                   </div>
 
-                  <div class="flex">
-                      <input type="submit" class="w-full px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900" value="Registrar">
+                  <div class="mt-4">
+                    <label class="block text-white">Tipo<label>
+                    <select name="tipo" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 text-sky-900">
+                      <option value="1" selected>Administrador</option>
+                      <option value="2">Especialista</option>
+                    </select>
                   </div>
-                  <div class="mt-6 text-white">
-                     ¿Ya tienes una cuenta?
-                      <a class="text-blue-600 hover:underline" href="{{url_for('login')}}">
-                          Log in
+
+                  <div class="flex px-20 justify-between">
+                      <input type="submit" class=" px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900 text-center" value="Registrar">
+                      <a href="{{url_for('user_session')}}" class=" px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900 text-center">
+                        Cancelar
                       </a>
                   </div>
               </div>
